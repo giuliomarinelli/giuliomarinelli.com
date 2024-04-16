@@ -1,0 +1,41 @@
+.logo-container {
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  text-align: center;
+
+  padding: 0 30px;
+
+  @media screen and (min-width: 595px) {
+      padding: 0;
+  }
+
+
+
+  .logo-large {
+    @media screen and (min-width: 565px) {
+      display: block;
+      width: 550px;
+    }
+
+    display: none;
+  }
+
+  .logo-small {
+
+
+
+    @media screen and (min-width: 565px) {
+      display: none;
+    }
+
+    @media screen and (min-width: 250px) {
+
+      width: 300px;
+    }
+
+    width: 100%;
+  }
+}

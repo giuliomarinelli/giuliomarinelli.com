@@ -8,7 +8,6 @@
 /* autoprefixer grid: on */
 
 @include core();
-@include typography($font-family: $material-typeface, $type-scale: $material-type-scale);
 @include theme($default-palette);
 // CSS Reset, comment out if not required or using a different module
 @import 'minireset.css/minireset';
@@ -16,3 +15,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.footer-bottom {
+  min-height: calc(100vh - 100px - 178.8px);
+}
