@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { configurations } from './config/config';
-import { Repository } from 'typeorm';
 import { UserSecurityManagementModule } from './user-security-management/user-security-management.module';
 
 @Module({
@@ -18,6 +17,6 @@ import { UserSecurityManagementModule } from './user-security-management/user-se
   }),
   UserSecurityManagementModule,],
   controllers: [],
-  providers: [ Repository],
+  providers: [],
 })
 export class AuthUserModule {}
