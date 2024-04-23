@@ -3,7 +3,6 @@ import { User } from 'apps/auth-user/src/user-security-management/entities/user.
 
 
 export enum ConfigKey {
-    APP = 'APP',
     DB = 'DB',
     KEYS = 'KEYS',
     EXP = 'EXP',
@@ -18,25 +17,16 @@ export enum Environment {
     Testing = 'testing',
 }
 
-const APPConfig = registerAs(
-    ConfigKey.APP, () => ({
-        env:
-            Environment[process.env.NODE_ENV as keyof typeof Environment] ||
-            'development',
-        port: Number(process.env.APP_PORT),
-        appName: process.env.APP_NAME,
-        corsOrigins: JSON.parse(process.env.CORS_ORIGINS)
-    }),
-);
+
 
 const DBConfig = registerAs(
     ConfigKey.DB, () => ({
-        host: process.env.DATABASE_HOST,
-        port: Number(process.env.DATABASE_PORT),
-        username: process.env.DATABASE_USERNAME,
-        password: process.env.DATABASE_PASSWORD,
-        database: process.env.DATABASE,
-        type: process.env.DATABASE_TYPE,
+        host: process.env.AUTH_USER_DATABASE_HOST,
+        port: Number(process.env.AUTH_USER_DATABASE_PORT),
+        username: process.env.AUTH_USER_DATABASE_USERNAME,
+        password: process.env.AUTH_USER_DATABASE_PASSWORD,
+        database: process.env.AUTH_USER_DATABASE,
+        type: process.env.AUTH_USER_DATABASE_TYPE,
         retryAttempts: 10,
         entities: [
             User
@@ -71,4 +61,4 @@ const COOKIEConfig = registerAs(
     })
 )
 
-export const configurations = [APPConfig, DBConfig, KEYSConfig, EXPConfig, COOKIEConfig]
+export const configurations = [DBConfig, KEYSConfig, EXPConfig, COOKIEConfig]
