@@ -1,4 +1,5 @@
 import { registerAs } from '@nestjs/config';
+import { User } from 'apps/auth-user/src/entities/user.entity';
 
 
 export enum ConfigKey {
@@ -36,8 +37,9 @@ const DBConfig = registerAs(
         password: process.env.DATABASE_PASSWORD,
         database: process.env.DATABASE,
         type: process.env.DATABASE_TYPE,
+        retryAttempts: 10,
         entities: [
-           
+            User
         ],
         synchronize: true
     }),

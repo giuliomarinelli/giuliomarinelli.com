@@ -1,5 +1,6 @@
 import { UUID } from "crypto";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Gender } from "./gender.enum";
 
 @Entity({ name: 'users' })
 export class User {
@@ -8,5 +9,18 @@ export class User {
     id: UUID
 
     @Column()
+    firstName: string
 
+    @Column()
+    lastName: string
+
+    @Column()
+    email: string
+
+    @Column()
+    hashedPassword: string
+
+    @Column()
+    gender: Gender
+    
 }

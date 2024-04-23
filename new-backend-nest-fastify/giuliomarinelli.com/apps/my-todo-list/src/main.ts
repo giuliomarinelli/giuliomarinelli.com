@@ -6,14 +6,11 @@ import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(MyTodoListModule,
     {
-      transport: Transport.RMQ,
+      transport: Transport.TCP,
       options: {
-        urls: ['amqp://localhost:5672'],
-        queue: 'my-todo-list-queue',
-        queueOptions: {
-          durable: false
-        },
-      }
+        host: '0.0.0.0',
+        port: 3001,
+      },
     }
   );
   await app.listen();

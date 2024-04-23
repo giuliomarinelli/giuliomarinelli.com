@@ -5,23 +5,32 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigModule } from '@nestjs/config';
 import { configurations } from './config/config';
 
+
 @Module({
   imports: [ClientsModule.register([
     {
-      name: 'MY_TODO_LIST',
-      transport: Transport.RMQ,
+      name: 'AUTH_USER',
+      transport: Transport.REDIS,
       options: {
-        urls: ['amqp://localhost:5672'],
-        queue: 'my-todo-list-queue'
+        host: 'localhost',
+        port: 6379,
       }
-    }
+    },
+    {
+      name: 'TO_DO_LIST',
+      transport: Transport.REDIS,
+      options: {
+        host: 'localhost',
+        port: 6379,
+      }
+    },
   ]),
   ConfigModule.forRoot({
     envFilePath: 'development.env',
     isGlobal: true,
     load: [...configurations]
   })
-],
+  ],
   controllers: [ApiGatewayController],
   providers: [ApiGatewayService],
 })
