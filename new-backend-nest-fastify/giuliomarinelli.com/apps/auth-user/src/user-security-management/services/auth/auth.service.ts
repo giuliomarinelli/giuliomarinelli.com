@@ -2,12 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../../entities/user.entity';
 import { Repository } from 'typeorm';
-import { UserRes } from '../../interfaces/user-res.interface';
+import { UserRes } from '../../interfaces/user-res-dto.interface';
 import * as bcrypt from 'bcrypt'
 import { UserReqDTO } from '../../interfaces/user-req-dto.interface';
+import { RpcException } from '@nestjs/microservices';
+import { UUID } from 'crypto';
+import { LoginReqDTO } from '../../interfaces/login-req-dto.interface';
 
 @Injectable()
-export class AuthService { 
+export class AuthService {
 
     constructor(
         @InjectRepository(User) private userRp: Repository<User>
@@ -32,8 +35,56 @@ export class AuthService {
         return userRes
     }
 
+    private async generateActivationCodeAndHash(userId: UUID): Promise<string> {
+        const generateRandomInt = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min
+        let code: string = ''
+        for (let i: number = 0; i < 6; i++) {
+            code += String(generateRandomInt(0, 9))
+        }
+        const user = await this.userRp.findOneBy({ id: userId })
+        user.hashedActivationCode = await this.passwordEncoder(code)
+        await this.userRp.save(user)
+        return code
+    }
+
     public async register(userDTO: UserReqDTO): Promise<UserRes> {
-        const {firstName, lastName, } = userDTO
+        const { firstName, lastName, email, password, gender } = userDTO
+        const user = new User(firstName, lastName, email, await this.passwordEncoder(password), gender)
+        try {
+            await this.userRp.save(user)
+        } catch (e) {
+            if (e.message) {
+                if (typeof e.message === 'string') {
+                    if (e.message.includes('Duplicate entry'))
+                        throw new RpcException('email already exists, cannot create')
+                }
+            } throw new RpcException('Database error')
+        }
+
+        return this.generateUserResModel(user)
+
+    }
+
+    public async login(loginDTO: LoginReqDTO): Promise<Map<TokenPairType, TokenPair>> {
+        const user = await this.getUserByEmail(loginDTO.email)
+        if (!user)
+            throw new UnauthorizedException('email and/or password are not correct', { cause: new Error(), description: 'Unauthorized' })
+        if (!await this.passwordMatcher(loginDTO.password, user.hashPassword))
+            throw new UnauthorizedException('email and/or password are not correct', { cause: new Error(), description: 'Unauthorized' })
+        const httpTokenPair: TokenPair = {
+            accessToken: await this.jwtUtils.generateToken(user, TokenType.ACCESS_TOKEN, loginDTO.restore),
+            refreshToken: await this.jwtUtils.generateToken(user, TokenType.REFRESH_TOKEN, loginDTO.restore),
+            type: TokenPairType.HTTP
+        }
+        const wsTokenPair: TokenPair = {
+            accessToken: await this.jwtUtils.generateToken(user, TokenType.WS_ACCESS_TOKEN, loginDTO.restore),
+            refreshToken: await this.jwtUtils.generateToken(user, TokenType.WS_REFRESH_TOKEN, loginDTO.restore),
+            type: TokenPairType.WS
+        }
+        const tokenMap = new Map<TokenPairType, TokenPair>
+        tokenMap.set(TokenPairType.HTTP, httpTokenPair)
+        tokenMap.set(TokenPairType.WS, wsTokenPair)
+        return tokenMap
     }
 
 }

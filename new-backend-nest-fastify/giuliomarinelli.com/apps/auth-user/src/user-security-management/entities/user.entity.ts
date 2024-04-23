@@ -1,19 +1,18 @@
 import { UUID } from "crypto";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { Gender } from "./gender.enum";
+import { Gender } from "../enums/gender.enum";
 
 
 @Entity({ name: 'users' })
 export class User {
 
     constructor(firstName: string, lastName: string, email: string,
-        hashedPassword: string, gender: Gender, hashedActivationCode: string) {
+        hashedPassword: string, gender: Gender) {
         this.firstName = firstName
         this.lastName = lastName
         this.email = email
         this.hashedPassword = hashedPassword
         this.gender = gender
-        this.hashedActivationCode = hashedActivationCode
         this.createdAt = new Date().getTime()
     }
 
@@ -38,8 +37,8 @@ export class User {
     @Column()
     active: boolean = false
 
-    @Column()
-    hashedActivationCode: string
+    @Column({ default: null })
+    hashedActivationCode: string | null
 
     @Column({ type: 'bigint' })
     createdAt: number
