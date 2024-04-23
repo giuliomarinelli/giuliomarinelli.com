@@ -9,7 +9,8 @@ module.exports = {
       'indigo': '#818cf8',
       'dark': '#030712',
       'page': '#384869',
-      'white': '#ff'
+      'white': '#ff',
+      'footer': '#1d2940'
     },
   },
 }

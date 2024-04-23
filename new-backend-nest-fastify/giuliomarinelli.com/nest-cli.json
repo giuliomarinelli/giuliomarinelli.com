@@ -1,8 +1,41 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "src",
+  "sourceRoot": "apps/giuliomarinelli.com/src",
   "compilerOptions": {
-    "deleteOutDir": true
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/giuliomarinelli.com/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/giuliomarinelli.com",
+  "projects": {
+    "giuliomarinelli.com": {
+      "type": "application",
+      "root": "apps/giuliomarinelli.com",
+      "entryFile": "main",
+      "sourceRoot": "apps/giuliomarinelli.com/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/giuliomarinelli.com/tsconfig.app.json"
+      }
+    },
+    "api-gateway": {
+      "type": "application",
+      "root": "apps/api-gateway",
+      "entryFile": "main",
+      "sourceRoot": "apps/api-gateway/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/api-gateway/tsconfig.app.json"
+      }
+    },
+    "my-todo-list": {
+      "type": "application",
+      "root": "apps/my-todo-list",
+      "entryFile": "main",
+      "sourceRoot": "apps/my-todo-list/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/my-todo-list/tsconfig.app.json"
+      }
+    }
   }
 }
