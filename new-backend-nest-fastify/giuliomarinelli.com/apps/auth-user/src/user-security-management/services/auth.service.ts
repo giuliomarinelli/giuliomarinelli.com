@@ -1,19 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../../entities/user.entity';
+import { User } from '../entities/user.entity';
 import { Repository } from 'typeorm';
-import { UserRes } from '../../interfaces/user-res-dto.interface';
+import { UserRes } from '../interfaces/user-res-dto.interface';
 import * as bcrypt from 'bcrypt'
-import { UserReqDTO } from '../../interfaces/user-req-dto.interface';
+import { UserReqDTO } from '../interfaces/user-req-dto.interface';
 import { RpcException } from '@nestjs/microservices';
 import { UUID } from 'crypto';
-import { LoginReqDTO } from '../../interfaces/login-req-dto.interface';
+import { LoginReqDTO } from '../interfaces/login-req-dto.interface';
+import { TokenPairType } from '../enums/token-pair-type.enum';
+import { TokenPair } from '../interfaces/token-pair.interface';
+import { JwtUtilsService } from './jwt-utils.service';
+import { TokenType } from '../enums/token-type.enum';
 
 @Injectable()
 export class AuthService {
 
     constructor(
-        @InjectRepository(User) private userRp: Repository<User>
+        @InjectRepository(User) private userRp: Repository<User>,
+        private jwtUtils: JwtUtilsService
     ) { }
 
     private async passwordEncoder(password: string): Promise<string> {
@@ -68,9 +73,9 @@ export class AuthService {
     public async login(loginDTO: LoginReqDTO): Promise<Map<TokenPairType, TokenPair>> {
         const user = await this.getUserByEmail(loginDTO.email)
         if (!user)
-            throw new UnauthorizedException('email and/or password are not correct', { cause: new Error(), description: 'Unauthorized' })
-        if (!await this.passwordMatcher(loginDTO.password, user.hashPassword))
-            throw new UnauthorizedException('email and/or password are not correct', { cause: new Error(), description: 'Unauthorized' })
+            throw new RpcException('email and/or password are not correct')
+        if (!await this.passwordMatcher(loginDTO.password, user.hashedPassword))
+            throw new RpcException('email and/or password are not correct')
         const httpTokenPair: TokenPair = {
             accessToken: await this.jwtUtils.generateToken(user, TokenType.ACCESS_TOKEN, loginDTO.restore),
             refreshToken: await this.jwtUtils.generateToken(user, TokenType.REFRESH_TOKEN, loginDTO.restore),
