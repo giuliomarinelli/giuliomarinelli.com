@@ -3,11 +3,11 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "apps/api-gateway/src",
   "compilerOptions": {
-    "deleteOutDir": true,
+    "deleteOutDir": false,
     "webpack": true,
     "tsConfigPath": "apps/api-gateway/tsconfig.app.json"
   },
-  "monorepo": true,
+  "monorepo": false,
   "root": "apps/api-gateway",
   "projects": {
     "api-gateway": {

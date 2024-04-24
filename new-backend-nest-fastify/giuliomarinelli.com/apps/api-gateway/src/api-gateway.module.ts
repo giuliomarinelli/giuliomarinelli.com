@@ -18,7 +18,7 @@ import { AuthUserModule } from './auth-user/auth-user.module';
       {
         name: 'AUTH_USER',
         transport: Transport.TCP,
-        options: { port: 3002 }
+        options: { port: 3003 }
       },
       {
         name: 'MY_TODO_LIST',

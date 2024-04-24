@@ -24,6 +24,13 @@ export class AuthUserController {
         ))
     }
 
+    @Get('/greetings')
+    public async getHello(): Promise<any> {
+        return {
+            message: await lastValueFrom(this.authUser.send({ cmd: 'ask_hello' }, { hello: 'hello' }))
+        }
+    }
+
 
     @Post('/login')
     public async login(@Req() req: FastifyRequest, @Res({ passthrough: true }) res: FastifyReply): Promise<ConfirmRes> {
