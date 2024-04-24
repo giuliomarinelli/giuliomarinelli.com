@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { configurations } from './config/config';
 import { UserSecurityManagementModule } from './user-security-management/user-security-management.module';
 
+
 @Module({
   imports: [ConfigModule.forRoot({
     envFilePath: 'development.env',

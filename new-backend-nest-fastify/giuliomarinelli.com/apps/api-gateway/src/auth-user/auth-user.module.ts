@@ -9,7 +9,8 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
         name: 'AUTH_USER',
         transport: Transport.TCP,
         options: { port: 3003, host: 'localhost' }
-      }]),
+      }
+    ]),
   ],
   controllers: [AuthUserController]
 })

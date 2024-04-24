@@ -4,7 +4,7 @@ import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import fastifyCookie from '@fastify/cookie';
-import { Transport } from '@nestjs/microservices';
+// import { Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
   const logger = new Logger('ApiGateway Bootstrap')
@@ -24,18 +24,18 @@ async function bootstrap() {
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
     }
   )
-  app.connectMicroservice({
-    transport: Transport.TCP,
-    options: {
-      port: 3001,
-    },
-  });
-  app.connectMicroservice({
-    transport: Transport.TCP,
-    options: {
-      port: 3002,
-    },
-  });
+  // app.connectMicroservice({
+  //   transport: Transport.TCP,
+  //   options: {
+  //     port: 3001,
+  //   },
+  // });
+  // app.connectMicroservice({
+  //   transport: Transport.TCP,
+  //   options: {
+  //     port: 3003,
+  //   },
+  // });
   await app.startAllMicroservices();
   const port = configSvc.get<number>('APP.port')
   await app.listen(port);

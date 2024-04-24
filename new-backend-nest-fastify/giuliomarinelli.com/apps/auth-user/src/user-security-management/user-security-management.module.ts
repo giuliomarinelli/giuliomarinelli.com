@@ -6,16 +6,17 @@ import { ClientTCP, ClientsModule, Transport } from '@nestjs/microservices';
 import { JwtUtilsService } from './services/jwt-utils.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthController } from './controllers/auth.controller';
+import { MapAdapterService } from './services/map-adapter.service';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([User]),ClientsModule.register([
+    imports: [TypeOrmModule.forFeature([User]), ClientsModule.register([
         {
-          name: 'AUTH_USER',
-          transport: Transport.TCP,
-          options: { port: 3003, host: 'localhost' }
+            name: 'AUTH_USER',
+            transport: Transport.TCP,
+            options: { port: 3003, host: 'localhost' }
         }]),
     ],
-    providers: [AuthService, ClientTCP, JwtUtilsService, JwtService],
+    providers: [AuthService, ClientTCP, JwtUtilsService, JwtService, MapAdapterService],
     controllers: [AuthController]
 })
 export class UserSecurityManagementModule { }
