@@ -120,11 +120,11 @@ export class AuthUserController {
         res.clearCookie('__access_tkn')
         res.clearCookie('__refresh_tkn')
         res.clearCookie('__ws_access_tkn')
-        res.clearCookie('__ws_refresh_token')
+        res.clearCookie('__ws_refresh_tkn')
         return {
             statusCode: HttpStatus.OK,
             timestamp: new Date().getTime(),
-            message: "Authenticated successfully"
+            message: "Logged out successfully"
         }
     }
 
