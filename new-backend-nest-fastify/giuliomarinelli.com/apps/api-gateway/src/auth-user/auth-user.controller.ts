@@ -115,6 +115,19 @@ export class AuthUserController {
         }
     }
 
+    @Get('logout')
+    public logout(@Res({ passthrough: true }) res: FastifyReply): ConfirmRes {
+        res.clearCookie('__access_tkn')
+        res.clearCookie('__refresh_tkn')
+        res.clearCookie('__ws_access_tkn')
+        res.clearCookie('__ws_refresh_token')
+        return {
+            statusCode: HttpStatus.OK,
+            timestamp: new Date().getTime(),
+            message: "Authenticated successfully"
+        }
+    }
+
 
 }
 
