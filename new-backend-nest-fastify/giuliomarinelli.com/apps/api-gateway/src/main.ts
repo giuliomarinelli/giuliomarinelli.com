@@ -36,7 +36,7 @@ async function bootstrap() {
   //     port: 3003,
   //   },
   // });
-  await app.startAllMicroservices();
+  // await app.startAllMicroservices();
   const port = configSvc.get<number>('APP.port')
   await app.listen(port);
   logger.log(`API Gateway listening on port ${port} with Fastify Server`)
