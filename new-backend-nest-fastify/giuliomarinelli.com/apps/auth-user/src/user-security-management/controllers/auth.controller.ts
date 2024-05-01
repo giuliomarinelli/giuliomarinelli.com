@@ -23,6 +23,11 @@ export class AuthController {
         return this.mapAdapter.adaptTokenPairTypeAndTokenPairMap(await this.authSvc.login(loginDTO))
     }
 
-   
+    @MessagePattern({ cmd: 'ask_hello' })
+    public async hello() {
+        return 'Hello World'
+    }
+
+
 
 }
